@@ -1,0 +1,34 @@
+language: node_js
+
+services:
+  - docker
+
+node_js:
+  - "node"
+
+node_js:
+  - "10"
+
+sudo: false
+
+os:
+  - linux
+
+dist: xenial
+
+install:
+  - npm ci
+
+script:
+  - npm run buildLib
+  - npm run installLib
+  - npm run buildTest
+
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}" && npm publish
+  on:
+    branch: master
+    repo: anacierdem/non-existing-repo
+    tags: true
