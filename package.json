@@ -18,7 +18,7 @@
     "prepare": "libdragon install"
   },
   "dependencies": {
-    "ed64": "^0.2.1",
-    "libdragon": "^1.3.14"
+    "ed64": "^0.2.2",
+    "libdragon": "^1.3.15"
   }
 }
