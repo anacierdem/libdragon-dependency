@@ -15,6 +15,7 @@ CC = $(GCCN64PREFIX)gcc
 AS = $(GCCN64PREFIX)as
 LD = $(GCCN64PREFIX)ld
 OBJCOPY = $(GCCN64PREFIX)objcopy
+OBJDUMP = $(GCCN64PREFIX)objdump
 
 BUILD_PATH = $(CURDIR)/../build
 SOURCE_PATH = $(CURDIR)/../test
@@ -41,7 +42,12 @@ $(PROG_NAME).o: $(SOURCE_PATH)/test.c
 $(PROG_NAME).elf: $(PROG_NAME).o
 	$(LD) -o $@ $^ $(LINK_FLAGS)
 
+$(PROG_NAME).txt: $(PROG_NAME).elf
+	$(OBJDUMP) $(PROG_NAME).elf -d > $(PROG_NAME).txt
+
 all: $(PROG_NAME)$(ROM_EXTENSION)
+
+disassemble: $(PROG_NAME).txt
 
 .PHONY: clean
 
