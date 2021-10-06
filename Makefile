@@ -1,37 +1,36 @@
-ROOTDIR = $(N64_INST)
-BUILD_PATH = $(CURDIR)/build
-SOURCE_PATH = $(CURDIR)/src
-INCLUDE_PATH = $(CURDIR)/include
-LIBRARY_NAME = libmain
+LIBRARY_NAME = main
 
-CFLAGS = -std=gnu99 -O2 -G0 -Wall -Werror -mtune=vr4300 -march=vr4300 -I$(INCLUDE_PATH) -I$(ROOTDIR)/mips64-elf/include
-ASFLAGS = -mtune=vr4300 -march=vr4300
-N64PREFIX = $(N64_INST)/bin/mips64-elf-
-INSTALLDIR = $(N64_INST)
-CC = $(N64PREFIX)gcc
-AS = $(N64PREFIX)as
-LD = $(N64PREFIX)ld
-AR = $(N64PREFIX)ar
+FULL_LIBRARY_NAME = lib$(LIBRARY_NAME)
+all: $(FULL_LIBRARY_NAME)
 
-all: $(LIBRARY_NAME)
+V = 1
+SOURCE_DIR = src
+BUILD_DIR = build
+include $(N64_INST)/include/n64.mk
 
-$(LIBRARY_NAME): $(BUILD_PATH)/$(LIBRARY_NAME).a
+# Activate N64 toolchain
+$(FULL_LIBRARY_NAME): CC=$(N64_CC)
+$(FULL_LIBRARY_NAME): AS=$(N64_AS)
+$(FULL_LIBRARY_NAME): LD=$(N64_LD)
+$(FULL_LIBRARY_NAME): CFLAGS+=$(N64_CFLAGS) -I$(CURDIR)/include
+$(FULL_LIBRARY_NAME): ASFLAGS+=$(N64_ASFLAGS) -I$(CURDIR)/include
+$(FULL_LIBRARY_NAME): LDFLAGS+=$(N64_LDFLAGS)
+$(FULL_LIBRARY_NAME): $(BUILD_DIR)/lib$(LIBRARY_NAME).a
 
-$(BUILD_PATH)/$(LIBRARY_NAME).a: $(BUILD_PATH)/$(LIBRARY_NAME).o
-	$(AR) -rcs -o $(BUILD_PATH)/$(LIBRARY_NAME).a $(BUILD_PATH)/$(LIBRARY_NAME).o
+$(BUILD_DIR)/$(FULL_LIBRARY_NAME).a: $(BUILD_DIR)/$(FULL_LIBRARY_NAME).o
+	$(AR) -rcs -o $@ $^
 
-$(BUILD_PATH)/$(LIBRARY_NAME).o: $(SOURCE_PATH)/$(LIBRARY_NAME).c
-	mkdir -p $(BUILD_PATH)
-	$(CC) $(CFLAGS) -c -o $(BUILD_PATH)/$(LIBRARY_NAME).o $(SOURCE_PATH)/$(LIBRARY_NAME).c
+install: $(FULL_LIBRARY_NAME)
+	install -Cv -m 0644 $(BUILD_DIR)/$^.a $(N64_INST)/mips64-elf/lib/$^.a
+	install -Cv -m 0644 include/$^.h $(N64_INST)/mips64-elf/include/$^.h
 
-install:
-	install -m 0644 $(BUILD_PATH)/$(LIBRARY_NAME).a $(INSTALLDIR)/mips64-elf/lib/$(LIBRARY_NAME).a
-	install -m 0644 $(INCLUDE_PATH)/$(LIBRARY_NAME).h $(INSTALLDIR)/mips64-elf/include/$(LIBRARY_NAME).h
+example: install
+	$(MAKE) -C example LIBRARY_NAME=$(LIBRARY_NAME)
 
-test:
-	make -C test
-
-.PHONY: clean
+.PHONY: clean install $(FULL_LIBRARY_NAME)
 
 clean:
-	rm -rf $(BUILD_PATH)/*
+	$(MAKE) -C example clean
+	rm -rf $(BUILD_DIR)/*
+
+-include $(wildcard $(BUILD_DIR)/*.d)

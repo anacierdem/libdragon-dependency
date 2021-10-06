@@ -7,14 +7,10 @@ Rename these files and related `#include`s to match your library:
     /include/libmain.h
     /src/libmain.c
 
-Also update `LIBRARY_SUFFIX` in `/test/Makefile` and `LIBRARY_NAME` in the root `Makefile`.
+Also update `LIBRARY_NAME` in the root `Makefile`.
 
 ## VSCode tasks
 
-There are four basic vscode tasks which map to npm scripts;
+There is a basic vscode tasks which map to npm scripts;
 
-**build:** Builds the library to object files via root `Makefile`'s `all` recipe. Installs it with `install` and runs make on `/test` folder to generate a ROM image to test the library _this is the default pre-launch task_
-
-## Travis CI
-
-There is also a Travis configuration to mimic the same build chain on CI.
+**build:** Runs the example recipe in the root `Makefile` which will also builds and install the library via the root `install` recipe. This generates an example ROM image to test the library _this is the default pre-launch task_

@@ -5,23 +5,19 @@
   "files": [
     "Makefile",
     "src/*",
-    "include/*",
-    "test/*"
+    "include/*"
   ],
   "author": "Ali Naci Erdem",
   "license": "ISC",
   "scripts": {
-    "build": "run-s buildLib installLib buildTest",
-    "buildLib": "libdragon make",
-    "installLib": "libdragon make install",
-    "buildTest": "libdragon make -C test -B",
+    "build": "libdragon make example",
     "clean": "libdragon make clean",
-    "prepare": "libdragon install"
-  },
-  "dependencies": {
-    "ed64": "^1.2.4"
+    "prepare": "libdragon init"
   },
   "devDependencies": {
-    "npm-run-all": "^4.1.5"
+    "ed64": "^2.0.3"
+  },
+  "peerDependencies": {
+    "libdragon": "^10.0.0"
   }
 }
