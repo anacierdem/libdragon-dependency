@@ -14,10 +14,10 @@
     "clean": "libdragon make clean",
     "prepare": "libdragon init"
   },
+  "dependencies": {
+    "libdragon": "^10.0.0"
+  },
   "devDependencies": {
     "ed64": "^2.0.3"
-  },
-  "peerDependencies": {
-    "libdragon": "^10.0.0"
   }
 }
