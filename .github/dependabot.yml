@@ -6,3 +6,4 @@ updates:
       interval: "daily"
     allow:
       - dependency-name: "ed64"
+      - dependency-name: "libdragon"
