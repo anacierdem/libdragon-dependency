@@ -15,7 +15,7 @@
     "prepare": "libdragon init"
   },
   "dependencies": {
-    "libdragon": "^10.6.0"
+    "libdragon": "^10.9.1"
   },
   "devDependencies": {
     "ed64": "^2.0.4"
